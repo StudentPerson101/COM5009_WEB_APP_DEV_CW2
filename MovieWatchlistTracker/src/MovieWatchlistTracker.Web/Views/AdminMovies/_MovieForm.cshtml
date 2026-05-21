@@ -1,0 +1,64 @@
+@model AdminMovieFormViewModel
+
+<form class="admin-form" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    @if (Model.Id.HasValue)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <div class="row g-3">
+        <div class="col-md-8">
+            <label class="form-label" asp-for="Title"></label>
+            <input class="form-control" asp-for="Title" />
+            <span class="text-danger" asp-validation-for="Title"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" asp-for="ReleaseYear">Release year</label>
+            <input class="form-control" asp-for="ReleaseYear" min="1888" max="2100" />
+            <span class="text-danger" asp-validation-for="ReleaseYear"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" asp-for="Runtime"></label>
+            <input class="form-control" asp-for="Runtime" min="1" placeholder="Minutes" />
+            <span class="text-danger" asp-validation-for="Runtime"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" asp-for="PosterUrl">Poster URL</label>
+            <input class="form-control" asp-for="PosterUrl" />
+            <span class="text-danger" asp-validation-for="PosterUrl"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" asp-for="ExternalApiId">External API ID</label>
+            <input class="form-control" asp-for="ExternalApiId" />
+            <span class="text-danger" asp-validation-for="ExternalApiId"></span>
+        </div>
+        <div class="col-12">
+            <label class="form-label" asp-for="Description"></label>
+            <textarea class="form-control" asp-for="Description" rows="5"></textarea>
+            <span class="text-danger" asp-validation-for="Description"></span>
+        </div>
+        <fieldset class="col-12 admin-checkbox-grid">
+            <legend>Genres</legend>
+            @if (Model.AvailableGenres.Count == 0)
+            {
+                <p>No genres exist yet.</p>
+            }
+            else
+            {
+                @foreach (var genre in Model.AvailableGenres)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="@genre.Id" id="genre-@genre.Id" checked="@Model.SelectedGenreIds.Contains(genre.Id)" />
+                        <label class="form-check-label" for="genre-@genre.Id">@genre.Name</label>
+                    </div>
+                }
+            }
+        </fieldset>
+    </div>
+
+    <div class="admin-form-actions">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+    </div>
+</form>

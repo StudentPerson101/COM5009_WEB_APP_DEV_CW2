@@ -1,0 +1,19 @@
+@model AdminGenreFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Genre";
+}
+
+<section class="browse-header" aria-labelledby="admin-genre-form-title">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1 id="admin-genre-form-title">Edit Genre</h1>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+</section>
+
+<partial name="_GenreForm" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

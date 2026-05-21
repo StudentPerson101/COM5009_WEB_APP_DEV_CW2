@@ -1,0 +1,91 @@
+@model AdminMovieDetailsViewModel
+
+@{
+    ViewData["Title"] = $"Admin - {Model.Title}";
+}
+
+<section class="browse-header" aria-labelledby="admin-movie-title">
+    <div>
+        <p class="eyebrow">Admin Movie Details</p>
+        <h1 id="admin-movie-title">@Model.Title</h1>
+    </div>
+    <div class="btn-toolbar gap-2" role="toolbar" aria-label="Movie admin actions">
+        <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    </div>
+</section>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success" role="status">@statusMessage</div>
+}
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<section class="content-section admin-detail-grid" aria-label="Stored movie details">
+    <div>
+        <dl class="admin-detail-list">
+            <dt>Release year</dt>
+            <dd>@(Model.ReleaseYear?.ToString() ?? "Not set")</dd>
+            <dt>Duration</dt>
+            <dd>@Model.DisplayDuration</dd>
+            <dt>Poster URL</dt>
+            <dd>@(Model.PosterUrl ?? "Not set")</dd>
+            <dt>External API ID</dt>
+            <dd>@(Model.ExternalApiId ?? "Not set")</dd>
+            <dt>Description</dt>
+            <dd>@(Model.Description ?? "Not set")</dd>
+        </dl>
+    </div>
+    <aside class="admin-related-panel">
+        <h2>Related User Data</h2>
+        <p>@Model.WatchlistItemCount watchlist items</p>
+        <p>@Model.ViewingHistoryCount viewing-history records</p>
+        <p>@Model.RatingCount ratings</p>
+        <p>@Model.ReviewCount reviews</p>
+    </aside>
+</section>
+
+<section class="content-section" aria-labelledby="genres-heading">
+    <div class="section-heading">
+        <h2 id="genres-heading">Genres</h2>
+        <a asp-controller="AdminGenres" asp-action="Index">Manage genres</a>
+    </div>
+
+    @if (Model.AssignedGenres.Count == 0)
+    {
+        <p>No genres assigned.</p>
+    }
+    else
+    {
+        <div class="admin-pill-list">
+            @foreach (var genre in Model.AssignedGenres)
+            {
+                <form asp-action="RemoveGenreFromMovie" method="post" class="admin-pill-form">
+                    <input type="hidden" name="movieId" value="@Model.Id" />
+                    <input type="hidden" name="genreId" value="@genre.Id" />
+                    <span>@genre.Name</span>
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Remove</button>
+                </form>
+            }
+        </div>
+    }
+
+    @if (Model.AvailableGenres.Count > 0)
+    {
+        <form class="admin-inline-form" asp-action="AssignGenre" method="post" aria-label="Assign genre">
+            <input type="hidden" name="movieId" value="@Model.Id" />
+            <label class="form-label" for="genreId">Assign genre</label>
+            <select id="genreId" class="form-select" name="genreId">
+                @foreach (var genre in Model.AvailableGenres)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+            <button class="btn btn-primary" type="submit">Assign</button>
+        </form>
+    }
+</section>
