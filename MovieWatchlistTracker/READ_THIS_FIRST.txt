@@ -29,11 +29,11 @@ If you would rather do this manually, DO NOT click "START_HERE.bat".
  - dotnet build .\src\MovieWatchlistTracker.Web\MovieWatchlistTracker.Web.csproj
  - dotnet run --project .\src\MovieWatchlistTracker.Web\MovieWatchlistTracker.Web.csproj --urls http://127.0.0.1:5093
 
-3. Once the server is running, open:
+3. Once the server is running, open this URL in your preferred browser:
 
    http://127.0.0.1:5093
 
-   If you changed the port in the command above, use that port instead.
+   If you changed the port number in the command above (5093), use your port number instead.
 
 4. To shut down the server, press Ctrl+C in the terminal running the server.
 
