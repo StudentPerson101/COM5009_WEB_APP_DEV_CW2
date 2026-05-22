@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+
+    bool IsActiveController(string controller)
+    {
+        return string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase) ||
+            (string.Equals(controller, "Movies", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase));
+    }
+
+    string NavLinkClass(string controller)
+    {
+        return IsActiveController(controller)
+            ? "nav-link active"
+            : "nav-link";
+    }
+
+    string? CurrentPage(string controller)
+    {
+        return IsActiveController(controller)
+            ? "page"
+            : null;
+    }
+}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Movie Watchlist Tracker</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MovieWatchlistTracker.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom app-navbar">
+            <div class="container">
+                <a class="navbar-brand fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Movie Watchlist Tracker</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="@NavLinkClass("Movies")" aria-current="@CurrentPage("Movies")" asp-area="" asp-controller="Movies" asp-action="Index">Browse</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="@NavLinkClass("Watchlists")" aria-current="@CurrentPage("Watchlists")" asp-area="" asp-controller="Watchlists" asp-action="Index">My Watchlist</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="@NavLinkClass("History")" aria-current="@CurrentPage("History")" asp-area="" asp-controller="History" asp-action="Index">Watched</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="@NavLinkClass("Profile")" aria-current="@CurrentPage("Profile")" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="@NavLinkClass("AdminMovies")" aria-current="@CurrentPage("AdminMovies")" asp-area="" asp-controller="AdminMovies" asp-action="Index">Admin Movies</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="@NavLinkClass("AdminGenres")" aria-current="@CurrentPage("AdminGenres")" asp-area="" asp-controller="AdminGenres" asp-action="Index">Genres</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="@NavLinkClass("AdminMaintenance")" aria-current="@CurrentPage("AdminMaintenance")" asp-area="" asp-controller="AdminMaintenance" asp-action="Index">Maintenance</a>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container app-shell">
+        <main id="main-content" role="main" class="pb-3" tabindex="-1">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

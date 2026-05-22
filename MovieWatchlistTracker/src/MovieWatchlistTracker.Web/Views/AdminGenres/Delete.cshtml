@@ -1,0 +1,31 @@
+@model AdminGenreListItemViewModel
+
+@{
+    ViewData["Title"] = "Delete Genre";
+}
+
+<section class="browse-header" aria-labelledby="delete-genre-title">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1 id="delete-genre-title">Delete @Model.Name</h1>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+</section>
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+<section class="content-section">
+    <p>Deleting a genre removes it from the catalog. This action is blocked while it is assigned to movies.</p>
+
+    <div class="alert @(Model.MovieCount > 0 ? "alert-warning" : "alert-danger")" role="alert">
+        <strong>Assigned movies:</strong> @Model.MovieCount
+    </div>
+
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <button class="btn btn-danger" type="submit" disabled="@(Model.MovieCount > 0)">Delete Genre</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+    </form>
+</section>

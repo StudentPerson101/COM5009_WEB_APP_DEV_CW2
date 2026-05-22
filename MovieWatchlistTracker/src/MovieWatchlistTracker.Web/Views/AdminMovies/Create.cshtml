@@ -1,0 +1,19 @@
+@model AdminMovieFormViewModel
+
+@{
+    ViewData["Title"] = "Add Movie";
+}
+
+<section class="browse-header" aria-labelledby="admin-movie-form-title">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1 id="admin-movie-form-title">Add Movie</h1>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+</section>
+
+<partial name="_MovieForm" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
