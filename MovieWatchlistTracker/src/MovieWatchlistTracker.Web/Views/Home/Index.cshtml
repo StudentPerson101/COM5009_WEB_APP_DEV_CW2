@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Browse Movies";
+}
+
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Stage 13 internal catalog</p>
+        <h1>Browse movies and shape your watchlist.</h1>
+        <p class="lead">The MVP uses local seeded movie data for catalog search, filtering, details, watchlist, ratings, reviews, and history workflows.</p>
+    </div>
+</section>
+
+<section class="toolbar" aria-label="Movie search and filters">
+    <input class="form-control" type="search" placeholder="Search movies" aria-label="Search movies" disabled />
+    <select class="form-select" aria-label="Genre filter" disabled>
+        <option>Genre</option>
+    </select>
+    <select class="form-select" aria-label="Year filter" disabled>
+        <option>Year</option>
+    </select>
+    <select class="form-select" aria-label="Rating filter" disabled>
+        <option>Rating</option>
+    </select>
+</section>
+
+<section class="content-section">
+    <div class="section-heading">
+        <h2>Popular Movies</h2>
+        <a asp-controller="Movies" asp-action="Index">Open browse route</a>
+    </div>
+    <div class="movie-grid">
+        @for (var i = 1; i <= 6; i++)
+        {
+            <article class="movie-card">
+                <div class="poster-placeholder" aria-hidden="true"></div>
+                <div class="movie-card-body">
+                    <h3>Movie Title @i</h3>
+                    <p>202@i - Genre - Duration</p>
+                    <button class="btn btn-outline-primary btn-sm" disabled>Add to Watchlist</button>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+<div class="alert alert-info mt-4" role="status">
+    Stage 13 catalog source: internal seeded movies only. External movie API integration is deferred.
+</div>

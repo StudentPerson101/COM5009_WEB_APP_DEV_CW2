@@ -1,0 +1,25 @@
+@model ReviewEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Review";
+}
+
+<section class="content-section">
+    <h1>Edit Review</h1>
+    <form asp-action="Edit" method="post">
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="MovieId" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Text" class="form-label"></label>
+            <textarea asp-for="Text" class="form-control" rows="7"></textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Review</button>
+        <a class="btn btn-outline-secondary" asp-controller="Movies" asp-action="Details" asp-route-id="@Model.MovieId">Cancel</a>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,157 @@
+@model WatchlistViewModel
+
+@{
+    ViewData["Title"] = "My Watchlist";
+}
+
+<section class="browse-header" aria-labelledby="watchlist-title">
+    <div>
+        <p class="eyebrow">Personal list</p>
+        <h1 id="watchlist-title">My Watchlist</h1>
+    </div>
+    <div class="browse-summary" aria-label="Watchlist item count">
+        <strong>@Model.Items.Count</strong>
+        <span>saved</span>
+    </div>
+</section>
+
+<form class="filter-bar" asp-controller="Watchlists" asp-action="Index" method="get" aria-label="Watchlist filters">
+    <div class="filter-field filter-field--wide">
+        <label class="form-label" for="query">Search</label>
+        <div class="autocomplete-field" data-movie-autocomplete>
+            <input id="query"
+                   class="form-control"
+                   type="search"
+                   name="query"
+                   value="@Model.Query"
+                   placeholder="Movie title"
+                   autocomplete="off"
+                   aria-autocomplete="list"
+                   aria-expanded="false"
+                   aria-controls="watchlist-title-suggestions"
+                   data-movie-autocomplete-input
+                   data-suggestions-url="@Url.Action("Suggestions", "Watchlists")" />
+            <div id="watchlist-title-suggestions"
+                 class="autocomplete-menu"
+                 role="listbox"
+                 aria-label="Watchlist movie title suggestions"
+                 hidden
+                 data-movie-autocomplete-menu></div>
+        </div>
+    </div>
+    <div class="filter-field">
+        <label class="form-label" for="genreId">Genre</label>
+        <select id="genreId" class="form-select" name="genreId">
+            <option value="">All genres</option>
+            @foreach (var genre in Model.Genres)
+            {
+                <option value="@genre.Id" selected="@(Model.SelectedGenreId == genre.Id)">@genre.Name</option>
+            }
+        </select>
+    </div>
+    <div class="filter-field">
+        <label class="form-label" for="year">Year</label>
+        <input id="year" class="form-control" type="number" name="year" value="@Model.SelectedYear" min="1888" max="2100" placeholder="Any" />
+    </div>
+    <div class="filter-field">
+        <label class="form-label" for="minimumRating">Rating</label>
+        <select id="minimumRating" class="form-select" name="minimumRating">
+            <option value="">Any rating</option>
+            @for (var rating = 5; rating >= 1; rating--)
+            {
+                <option value="@rating" selected="@(Model.SelectedRating == rating)">@($"{rating}+ / 5")</option>
+            }
+        </select>
+    </div>
+    <div class="filter-field">
+        <label class="form-label" for="status">Status</label>
+        <select id="status" class="form-select" name="status">
+            <option value="">Any status</option>
+            <option value="planned" selected="@(Model.SelectedStatus == "planned")">Planned</option>
+            <option value="watching" selected="@(Model.SelectedStatus == "watching")">Watching</option>
+            <option value="watched" selected="@(Model.SelectedStatus == "watched")">Watched</option>
+            <option value="dropped" selected="@(Model.SelectedStatus == "dropped")">Dropped</option>
+        </select>
+    </div>
+    <div class="filter-field">
+        <label class="form-label" for="sortBy">Sort</label>
+        <select id="sortBy" class="form-select" name="sortBy">
+            <option value="" selected="@(string.IsNullOrWhiteSpace(Model.SortBy))">Recently added</option>
+            <option value="title" selected="@(Model.SortBy == "title")">Title</option>
+            <option value="year" selected="@(Model.SortBy == "year")">Release year</option>
+            <option value="rating" selected="@(Model.SortBy == "rating")">Rating</option>
+            <option value="status" selected="@(Model.SortBy == "status")">Status</option>
+        </select>
+    </div>
+    <div class="filter-actions">
+        <button class="btn btn-primary" type="submit">Apply</button>
+        <a class="btn btn-outline-secondary" asp-controller="Watchlists" asp-action="Index">Reset</a>
+    </div>
+</form>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success mt-3" role="status">@statusMessage</div>
+}
+
+<section class="content-section" aria-label="Saved movies">
+    @if (Model.Items.Count == 0)
+    {
+        <div class="empty-state">
+            <h2>No saved movies</h2>
+            <a class="btn btn-primary" asp-controller="Movies" asp-action="Index">Browse Movies</a>
+        </div>
+    }
+    else
+    {
+        <div class="media-list">
+            @foreach (var item in Model.Items)
+            {
+                <article class="media-row">
+                    <a class="poster-frame poster-frame--small" asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId" aria-label="Open @item.Title details">
+                        @if (!string.IsNullOrWhiteSpace(item.PosterUrl))
+                        {
+                            <img src="@item.PosterUrl" alt="@item.Title cover" loading="lazy" onerror="this.remove();" />
+                        }
+                        <span class="poster-fallback" aria-hidden="true">@item.Title.Substring(0, 1)</span>
+                    </a>
+                    <div class="media-row-body">
+                        <div>
+                            <h2><a asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId">@item.Title</a></h2>
+                            <p class="muted">
+                                @(item.ReleaseYear?.ToString() ?? "Year TBA")
+                                <span aria-hidden="true"> | </span>
+                                @(item.Genres.Count == 0 ? "Uncategorized" : string.Join(", ", item.Genres))
+                            </p>
+                            <p class="muted">Added @item.AddedAt.ToString("MMM d, yyyy")</p>
+                        </div>
+                        <div class="media-row-meta">
+                            <span class="status-pill">@item.Status</span>
+                            <span>@(item.AverageRating.HasValue ? $"{item.AverageRating}/5" : "No ratings")</span>
+                        </div>
+                        <div class="row-actions">
+                            @if (item.WatchlistItemId.HasValue)
+                            {
+                                @if (item.Status == "watched")
+                                {
+                                    <form asp-controller="Watchlists" asp-action="MarkUnwatched" asp-route-id="@item.WatchlistItemId" method="post">
+                                        <button class="btn btn-outline-secondary btn-sm" type="submit" data-confirm="Remove @item.Title from watched history and set its watchlist status back to planned?" aria-label="Remove @item.Title from watched history">Remove History</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-controller="Watchlists" asp-action="MarkWatched" asp-route-id="@item.WatchlistItemId" method="post">
+                                        <button class="btn btn-outline-secondary btn-sm" type="submit" aria-label="Mark @item.Title as watched">Mark Watched</button>
+                                    </form>
+                                }
+                                <form asp-controller="Watchlists" asp-action="RemoveItem" asp-route-id="@item.WatchlistItemId" method="post">
+                                    <button class="btn btn-outline-danger btn-sm" type="submit" data-confirm="Remove @item.Title from your watchlist?" aria-label="Remove @item.Title from your watchlist">Remove</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>

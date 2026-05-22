@@ -1,0 +1,45 @@
+@model MovieCardViewModel
+
+<article class="movie-card">
+    <a class="poster-frame" asp-controller="Movies" asp-action="Details" asp-route-id="@Model.MovieId" aria-label="Open @Model.Title details">
+        @if (!string.IsNullOrWhiteSpace(Model.PosterUrl))
+        {
+            <img src="@Model.PosterUrl" alt="@Model.Title cover" loading="lazy" onerror="this.remove();" />
+        }
+        <span class="poster-fallback" aria-hidden="true">@Model.Title.Substring(0, 1)</span>
+    </a>
+    <div class="movie-card-body">
+        <div>
+            <h3>
+                <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model.MovieId">@Model.Title</a>
+            </h3>
+            <p class="muted">
+                @(Model.ReleaseYear?.ToString() ?? "Year TBA")
+                <span aria-hidden="true"> | </span>
+                @(Model.Genres.Count == 0 ? "Uncategorized" : string.Join(", ", Model.Genres))
+            </p>
+        </div>
+        <div class="meta-row" aria-label="@Model.Title quick facts">
+            <span>@Model.DisplayDuration</span>
+            <span>@(Model.AverageRating.HasValue ? $"{Model.AverageRating}/5" : "No ratings")</span>
+        </div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            @if (Model.IsInCurrentUserWatchlist)
+            {
+                <span class="status-pill">In Watchlist</span>
+            }
+            else
+            {
+                <form asp-controller="Watchlists" asp-action="AddMovie" method="post">
+                    <input type="hidden" name="movieId" value="@Model.MovieId" />
+                    <button class="btn btn-outline-primary btn-sm w-100" type="submit" aria-label="Add @Model.Title to watchlist">Add to Watchlist</button>
+                </form>
+            }
+        }
+        else
+        {
+            <a class="btn btn-outline-primary btn-sm" asp-controller="Account" asp-action="Login" aria-label="Log in to save @Model.Title">Log in to Save</a>
+        }
+    </div>
+</article>
