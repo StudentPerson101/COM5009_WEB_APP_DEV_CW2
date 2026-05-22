@@ -17,7 +17,7 @@ If you would rather do this manually, DO NOT click "START_HERE.bat".
 
 
 1. Make sure your system has the .NET 10 SDK installed.
-   On Windows, you can install it with:
+   On Windows, you can install it with (enter this in a terminal):
    winget install Microsoft.DotNet.SDK.10
 
 2. To manually start the server, run:
