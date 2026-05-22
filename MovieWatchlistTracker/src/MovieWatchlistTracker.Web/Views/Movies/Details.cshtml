@@ -13,7 +13,7 @@
     <div class="details-poster poster-frame poster-frame--large">
         @if (!string.IsNullOrWhiteSpace(Model.PosterUrl))
         {
-            <img src="@Model.PosterUrl" alt="@Model.Title poster" loading="lazy" onerror="this.remove();" />
+            <img src="@Model.PosterUrl" alt="@Model.Title cover" loading="lazy" onerror="this.remove();" />
         }
         <span class="poster-fallback" aria-hidden="true">@Model.Title.Substring(0, 1)</span>
     </div>

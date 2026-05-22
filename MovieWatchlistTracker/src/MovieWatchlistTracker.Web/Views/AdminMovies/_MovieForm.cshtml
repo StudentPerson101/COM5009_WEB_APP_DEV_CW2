@@ -1,6 +1,6 @@
 @model AdminMovieFormViewModel
 
-<form class="admin-form" method="post">
+<form class="admin-form" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
     @if (Model.Id.HasValue)
     {
@@ -24,7 +24,7 @@
             <span class="text-danger" asp-validation-for="Runtime"></span>
         </div>
         <div class="col-md-4">
-            <label class="form-label" asp-for="PosterUrl">Poster URL</label>
+            <label class="form-label" asp-for="PosterUrl">Cover path or URL</label>
             <input class="form-control" asp-for="PosterUrl" />
             <span class="text-danger" asp-validation-for="PosterUrl"></span>
         </div>
@@ -37,6 +37,35 @@
             <label class="form-label" asp-for="Description"></label>
             <textarea class="form-control" asp-for="Description" rows="5"></textarea>
             <span class="text-danger" asp-validation-for="Description"></span>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" asp-for="CoverUpload"></label>
+            <input class="form-control" asp-for="CoverUpload" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+            <span class="text-danger" asp-validation-for="CoverUpload"></span>
+            <div class="form-text">Uploads are saved under /images/covers and keep their original JPG, PNG, or WebP type.</div>
+        </div>
+        <div class="col-md-4">
+            @if (!string.IsNullOrWhiteSpace(Model.PosterUrl))
+            {
+                <label class="form-label">Current cover</label>
+                <div class="admin-cover-preview poster-frame">
+                    <img src="@Model.PosterUrl" alt="@Model.Title cover" loading="lazy" onerror="this.remove();" />
+                    <span class="poster-fallback" aria-hidden="true">@(string.IsNullOrWhiteSpace(Model.Title) ? "?" : Model.Title.Substring(0, 1))</span>
+                </div>
+            }
+            else
+            {
+                <label class="form-label">Current cover</label>
+                <div class="admin-cover-preview poster-frame">
+                    <span class="poster-fallback" aria-hidden="true">@(string.IsNullOrWhiteSpace(Model.Title) ? "?" : Model.Title.Substring(0, 1))</span>
+                </div>
+            }
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="RemoveCover" />
+                <label class="form-check-label" asp-for="RemoveCover"></label>
+            </div>
         </div>
         <fieldset class="col-12 admin-checkbox-grid">
             <legend>Genres</legend>

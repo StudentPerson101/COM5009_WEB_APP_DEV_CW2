@@ -10,10 +10,14 @@ namespace MovieWatchlistTracker.Web.Controllers;
 public class AdminMoviesController : Controller
 {
     private readonly IAdminCatalogService _adminCatalogService;
+    private readonly ICoverStorageService _coverStorageService;
 
-    public AdminMoviesController(IAdminCatalogService adminCatalogService)
+    public AdminMoviesController(
+        IAdminCatalogService adminCatalogService,
+        ICoverStorageService coverStorageService)
     {
         _adminCatalogService = adminCatalogService;
+        _coverStorageService = coverStorageService;
     }
 
     [HttpGet]
@@ -41,6 +45,12 @@ public class AdminMoviesController : Controller
     public async Task<IActionResult> Create(AdminMovieFormViewModel model)
     {
         if (!ModelState.IsValid)
+        {
+            model.AvailableGenres = (await _adminCatalogService.CreateMovieFormAsync()).AvailableGenres;
+            return View(model);
+        }
+
+        if (!await TryApplyCoverUploadAsync(model))
         {
             model.AvailableGenres = (await _adminCatalogService.CreateMovieFormAsync()).AvailableGenres;
             return View(model);
@@ -75,6 +85,12 @@ public class AdminMoviesController : Controller
         }
 
         if (!ModelState.IsValid)
+        {
+            model.AvailableGenres = (await _adminCatalogService.CreateMovieFormAsync()).AvailableGenres;
+            return View(model);
+        }
+
+        if (!await TryApplyCoverUploadAsync(model))
         {
             model.AvailableGenres = (await _adminCatalogService.CreateMovieFormAsync()).AvailableGenres;
             return View(model);
@@ -128,5 +144,27 @@ public class AdminMoviesController : Controller
         var result = await _adminCatalogService.RemoveGenreFromMovieAsync(movieId, genreId);
         TempData[result.Succeeded ? "StatusMessage" : "ErrorMessage"] = result.Message;
         return RedirectToAction(nameof(Details), new { id = movieId });
+    }
+
+    private async Task<bool> TryApplyCoverUploadAsync(AdminMovieFormViewModel model)
+    {
+        if (model.CoverUpload is not null)
+        {
+            var uploadResult = await _coverStorageService.SaveCoverAsync(model.CoverUpload);
+            if (!uploadResult.Succeeded)
+            {
+                ModelState.AddModelError(nameof(model.CoverUpload), uploadResult.ErrorMessage ?? "The cover image could not be uploaded.");
+                return false;
+            }
+
+            model.PosterUrl = uploadResult.CoverUrl;
+            model.RemoveCover = false;
+        }
+        else if (model.RemoveCover)
+        {
+            model.PosterUrl = null;
+        }
+
+        return true;
     }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace MovieWatchlistTracker.Web.ViewModels;
 
@@ -16,6 +17,12 @@ public class AdminMovieFormViewModel
     public string? Description { get; set; }
 
     public string? PosterUrl { get; set; }
+
+    [Display(Name = "Upload local cover")]
+    public IFormFile? CoverUpload { get; set; }
+
+    [Display(Name = "Remove current cover")]
+    public bool RemoveCover { get; set; }
 
     [Display(Name = "Duration")]
     [Range(1, 1000, ErrorMessage = "Duration must be between 1 and 1000 minutes.")]

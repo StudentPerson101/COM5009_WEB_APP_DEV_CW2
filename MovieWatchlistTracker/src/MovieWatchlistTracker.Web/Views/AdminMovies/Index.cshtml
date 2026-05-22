@@ -72,7 +72,10 @@
 <section class="content-section" aria-labelledby="movie-table-heading">
     <div class="section-heading">
         <h2 id="movie-table-heading">Stored Movies</h2>
-        <a asp-controller="AdminGenres" asp-action="Index">Manage genres</a>
+        <div class="action-row">
+            <a asp-controller="AdminGenres" asp-action="Index">Manage genres</a>
+            <a asp-controller="AdminMaintenance" asp-action="Index">Cover maintenance</a>
+        </div>
     </div>
 
     @if (Model.Movies.Count == 0)

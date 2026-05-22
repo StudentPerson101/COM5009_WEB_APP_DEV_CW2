@@ -152,7 +152,10 @@ public static class DbInitializer
             }
 
             existingMovie.Description = seedMovie.Description;
-            existingMovie.PosterUrl = seedMovie.PosterUrl;
+            if (string.IsNullOrWhiteSpace(existingMovie.PosterUrl))
+            {
+                existingMovie.PosterUrl = seedMovie.PosterUrl;
+            }
             existingMovie.Runtime = seedMovie.Runtime;
             existingMovie.ExternalApiId = null;
         }

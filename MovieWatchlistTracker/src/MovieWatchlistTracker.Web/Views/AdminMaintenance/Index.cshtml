@@ -1,0 +1,64 @@
+@model AdminCoverMaintenanceViewModel
+
+@{
+    ViewData["Title"] = "Admin Maintenance";
+}
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success" role="status">@statusMessage</div>
+}
+
+<section class="browse-header" aria-labelledby="admin-maintenance-title">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1 id="admin-maintenance-title">Maintenance</h1>
+        <p class="muted mb-0">Cover cleanup is scoped to app-managed cover image folders only.</p>
+    </div>
+    <div class="action-row">
+        <a class="btn btn-outline-secondary" asp-controller="AdminMovies" asp-action="Index">Movies</a>
+        <a class="btn btn-outline-secondary" asp-controller="AdminGenres" asp-action="Index">Genres</a>
+    </div>
+</section>
+
+<section class="content-section" aria-labelledby="cover-storage-title">
+    <div class="section-heading">
+        <h2 id="cover-storage-title">Cover Storage</h2>
+    </div>
+
+    <div class="admin-stat-grid">
+        <div class="admin-stat">
+            <span>Stored cover files</span>
+            <strong>@Model.TotalCoverFiles</strong>
+        </div>
+        <div class="admin-stat">
+            <span>In use</span>
+            <strong>@Model.InUseCoverFiles</strong>
+        </div>
+        <div class="admin-stat">
+            <span>Unused</span>
+            <strong>@Model.UnusedCoverFiles</strong>
+        </div>
+        <div class="admin-stat">
+            <span>Missing referenced files</span>
+            <strong>@Model.MissingReferencedFiles</strong>
+        </div>
+    </div>
+
+    <div class="admin-maintenance-panel">
+        <div>
+            <h3>Unused cover cleanup</h3>
+            <p>Deletes app-managed cover image files that are not referenced by any movie cover path. New uploads are saved under @Model.CoverFolderPath.</p>
+        </div>
+        <form asp-action="CleanupUnusedCovers" method="post">
+            @if (Model.UnusedCoverFiles == 0)
+            {
+                <button class="btn btn-danger" type="submit" disabled>Clean Up Unused Covers</button>
+            }
+            else
+            {
+                <button class="btn btn-danger" type="submit">Clean Up Unused Covers</button>
+            }
+        </form>
+    </div>
+</section>

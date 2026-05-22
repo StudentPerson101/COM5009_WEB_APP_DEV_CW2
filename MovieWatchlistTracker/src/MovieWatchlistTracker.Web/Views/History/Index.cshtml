@@ -63,7 +63,7 @@
                     <a class="poster-frame poster-frame--small" asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId" aria-label="Open @item.Title details">
                         @if (!string.IsNullOrWhiteSpace(item.PosterUrl))
                         {
-                            <img src="@item.PosterUrl" alt="@item.Title poster" loading="lazy" onerror="this.remove();" />
+                            <img src="@item.PosterUrl" alt="@item.Title cover" loading="lazy" onerror="this.remove();" />
                         }
                         <span class="poster-fallback" aria-hidden="true">@item.Title.Substring(0, 1)</span>
                     </a>
