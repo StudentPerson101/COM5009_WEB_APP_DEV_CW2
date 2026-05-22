@@ -37,4 +37,28 @@ If you would rather do this manually, DO NOT click "START_HERE.bat".
 
 4. To shut down the server, press Ctrl+C in the terminal running the server.
 
+5. The admin has the ability to manage/edit movies: add/remove movies (movie details), add/remove genres.
 
+admin details:
+ - username: dev.user
+ - email: dev.user@example.local
+ - password: DevUser!234
+
+6. HTTPS:
+
+ASP.NET Core local HTTPS certificate setup
+
+Normal setup:
+
+dotnet dev-certs https --check
+dotnet dev-certs https --trust
+
+If HTTPS still shows certificate warnings, reset the dev certificate:
+
+dotnet dev-certs https --clean
+dotnet dev-certs https --trust
+
+Notes:
+- The trust command may show an operating system confirmation prompt.
+- This is a one-time developer machine setup step, not something to run every time the app starts.
+- Use https://localhost:<port> rather than https://127.0.0.1:<port>.
