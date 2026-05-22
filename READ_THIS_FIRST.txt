@@ -1,8 +1,8 @@
 (Path too long)
-FIRST, if you haven't already, place this app as far up in your filesystem (avoid nested directories) as this app contains files with very long names. If attempting to unzip this app under such conditions, you may incur "Error 0x80010135: Path too long".
+FIRST, if you haven't already, place this app as far up in your filesystem (avoid nested directories) as this app contains file with very long names. If attempting to unzip this app under such conditions, you may incur "Error 0x80010135: Path too long".
 
 (automated server startup program)
-SECOND, if you double click "START_HERE.bat", a terminal will auto-open and you will be guided through the automated dependency installation process.
+SECOND, if you double click "START_HERE.bat", a terminal will auto-opened and you will be guided through the automated dependency installation process.
 
 The automated server startup program will clean, restore, build and start the server locally on port 5093.
  - If starting on port 5093 fails, the program will try each port between 5093-5100. This is only the case with the automated server startup, not if you're proceeding manually.
@@ -12,12 +12,14 @@ Close other running copies of the app, or run manually with:
 dotnet run --project ... --urls http://127.0.0.1:5093"
 (Only change "5093" to another port number if you know what you're doing.)
 
+This script also automatically opens the web app in your default browser.
+("MovieWatchlistTracker\tools\start-here.ps1")
+
+
 If you would rather do this manually, DO NOT click "START_HERE.bat".
 
-
-
 1. Make sure your system has the .NET 10 SDK installed.
-   On Windows, you can install it with (enter this in a terminal):
+   On Windows, you can install it with:
    winget install Microsoft.DotNet.SDK.10
 
 2. To manually start the server, run:
@@ -37,12 +39,7 @@ If you would rather do this manually, DO NOT click "START_HERE.bat".
 
 4. To shut down the server, press Ctrl+C in the terminal running the server.
 
-5. The admin has the ability to manage/edit movies: add/remove movies (movie details), add/remove genres.
-
-admin details:
- - username: dev.user
- - email: dev.user@example.local
- - password: DevUser!234
+5. 
 
 6. HTTPS:
 
@@ -62,3 +59,4 @@ Notes:
 - The trust command may show an operating system confirmation prompt.
 - This is a one-time developer machine setup step, not something to run every time the app starts.
 - Use https://localhost:<port> rather than https://127.0.0.1:<port>.
+
