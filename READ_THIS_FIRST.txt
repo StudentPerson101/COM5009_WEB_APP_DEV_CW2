@@ -1,8 +1,8 @@
 (Path too long)
-FIRST, if you haven't already, place this app as far up in your filesystem (avoid nested directories) as this app contains file with very long names. If attempting to unzip this app under such conditions, you may incur "Error 0x80010135: Path too long".
+FIRST, if you haven't already, place this app as far up in your filesystem (avoid nested directories) as this app contains files with very long names. If attempting to unzip this app under such conditions, you may incur "Error 0x80010135: Path too long".
 
 (automated server startup program)
-SECOND, if you double click "START_HERE.bat", a terminal will auto-opened and you will be guided through the automated dependency installation process.
+SECOND, if you double click "START_HERE.bat", a terminal will auto-open and you will be guided through the automated dependency installation process.
 
 The automated server startup program will clean, restore, build and start the server locally on port 5093.
  - If starting on port 5093 fails, the program will try each port between 5093-5100. This is only the case with the automated server startup, not if you're proceeding manually.
