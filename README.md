@@ -26,3 +26,8 @@
 26.	If the terminal window is closed instead, the attached server process should also stop.
 27.	If the server does not stop normally, the fallback method is to end the related dotnet process through the terminal, PowerShell, or Task Manager.
 28.	If setup cannot continue, or the user declines to start the server, the launcher prints manual commands instead.
+
+admin details:
+ - username: dev.user
+ - email: dev.user@example.local
+ - password: DevUser!234
