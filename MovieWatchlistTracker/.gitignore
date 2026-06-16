@@ -37,8 +37,7 @@ packages/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
-src/MovieWatchlistTracker.Web/wwwroot/images/covers/*
-!src/MovieWatchlistTracker.Web/wwwroot/images/covers/.gitkeep
+
 
 # Logs and temporary files
 *.log
