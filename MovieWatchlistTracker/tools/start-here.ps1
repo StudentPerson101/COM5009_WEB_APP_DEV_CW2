@@ -142,6 +142,63 @@ function Get-AvailableAppUrl {
     return $null
 }
 
+function Test-WindowsLongPathsEnabled {
+    try {
+        $value = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -ErrorAction Stop
+        return $value -eq 1
+    }
+    catch {
+        return $false
+    }
+}
+
+function Test-ProjectPathLength {
+    $legacyMaxPath = 260
+    $likelyLongBuildPaths = @(
+        "src\MovieWatchlistTracker.Web\bin\Debug\net10.0\runtimes\browser-wasm\nativeassets\net9.0\e_sqlite3.a",
+        "tests\MovieWatchlistTracker.Tests\bin\Debug\net10.0\runtimes\browser-wasm\nativeassets\net9.0\e_sqlite3.a",
+        "src\MovieWatchlistTracker.Web\obj\Debug\net10.0\MovieWatchlistTracker.Web.RazorAssemblyInfo.cs"
+    )
+
+    $longestCandidate = $likelyLongBuildPaths |
+        ForEach-Object {
+            $fullPath = Join-Path $ProjectRoot $_
+            [pscustomobject]@{
+                Path = $fullPath
+                Length = $fullPath.Length
+            }
+        } |
+        Sort-Object Length -Descending |
+        Select-Object -First 1
+
+    if ($longestCandidate.Length -lt $legacyMaxPath) {
+        return $true
+    }
+
+    if (Test-WindowsLongPathsEnabled) {
+        Write-Host "This project path is long, but Windows long paths appear to be enabled." -ForegroundColor Yellow
+        Write-Host "If build errors still mention path length, move the app closer to the drive root."
+        return $true
+    }
+
+    Write-Heading "Path Length Check"
+    Write-Host "This app is too deeply nested for this Windows setup." -ForegroundColor Red
+    Write-Host ""
+    Write-Host "The current folder is:"
+    Write-Host $ProjectRoot
+    Write-Host ""
+    Write-Host "A likely build output path would be $($longestCandidate.Length) characters long."
+    Write-Host "Windows builds commonly fail when paths reach $legacyMaxPath characters."
+    Write-Host ""
+    Write-Host "Move the MovieWatchlistTracker folder closer to the drive root, then run START_HERE.bat again."
+    Write-Host "Good examples:"
+    Write-Host "  C:\MovieWatchlistTracker"
+    Write-Host "  C:\Users\User\MovieWatchlistTracker"
+    Write-Host ""
+    Write-Host "Nothing has been restored, built, installed, or started yet."
+    return $false
+}
+
 function Open-AppInDefaultBrowserWhenReady {
     param([string]$Url)
 
@@ -251,6 +308,10 @@ function Start-WebApp {
 Write-Heading "MovieWatchlistTracker Setup"
 Write-Host "This script can create a desktop shortcut, check for the .NET 10 SDK, and start the local web server."
 
+if (-not (Test-ProjectPathLength)) {
+    exit 1
+}
+
 if (Read-YesNo "Create desktop shortcut?") {
     New-DesktopShortcut
 }
@@ -291,7 +352,11 @@ if (Read-YesNo "Start server now?") {
 }
 else {
     Show-ManualCommands
-}$ErrorActionPreference = "Stop"
+}
+
+exit
+
+$ErrorActionPreference = "Stop"
 
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $ProjectFile = Join-Path $ProjectRoot "src\MovieWatchlistTracker.Web\MovieWatchlistTracker.Web.csproj"

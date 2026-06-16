@@ -14,12 +14,14 @@ public class RatingService : IRatingService
         _context = context;
     }
 
-    public async Task<Rating> CreateOrUpdateAsync(string userId, int movieId, int score)
+    public async Task<Rating> CreateOrUpdateAsync(string userId, int movieId, double score)
     {
-        if (score is < 1 or > 5)
+        if (!double.IsFinite(score) || score is < 1 or > 10)
         {
-            throw new ArgumentOutOfRangeException(nameof(score), "Rating must be between 1 and 5.");
+            throw new ArgumentOutOfRangeException(nameof(score), "Rating must be between 1 and 10.");
         }
+
+        score = Math.Round(score, 1, MidpointRounding.AwayFromZero);
 
         var movieExists = await _context.Movies.AnyAsync(movie => movie.Id == movieId);
         if (!movieExists)

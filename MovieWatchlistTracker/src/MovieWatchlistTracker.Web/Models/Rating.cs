@@ -10,5 +10,5 @@ public class Rating
     public int MovieId { get; set; }
     public Movie? Movie { get; set; }
 
-    public int Score { get; set; }
+    public double Score { get; set; }
 }

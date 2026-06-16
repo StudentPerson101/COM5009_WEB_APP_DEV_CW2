@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Admin Portal";
+}
+
+<section class="browse-header" aria-labelledby="admin-portal-title">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1 id="admin-portal-title">Admin Portal</h1>
+    </div>
+</section>
+
+<section class="content-section" aria-labelledby="admin-portal-sections">
+    <div class="section-heading">
+        <h2 id="admin-portal-sections">Admin Areas</h2>
+    </div>
+
+    <div class="admin-portal-grid">
+        <article class="admin-portal-item">
+            <div>
+                <h3>Appearance</h3>
+                <p>Logo, banner, page colours, text colours, and outline colours.</p>
+            </div>
+            <a class="btn btn-primary" asp-controller="AdminAppearance" asp-action="Index">Open Appearance</a>
+        </article>
+
+        <article class="admin-portal-item">
+            <div>
+                <h3>Maintenance</h3>
+                <p>Cover storage checks and unused cover cleanup.</p>
+            </div>
+            <a class="btn btn-primary" asp-controller="AdminMaintenance" asp-action="Index">Open Maintenance</a>
+        </article>
+
+        <article class="admin-portal-item">
+            <div>
+                <h3>Movie Management</h3>
+                <p>Movie catalog, cover uploads, genres, and related movie data.</p>
+            </div>
+            <div class="admin-portal-actions">
+                <a class="btn btn-primary" asp-controller="AdminMovies" asp-action="Index">Open Movies</a>
+                <a class="btn btn-outline-secondary" asp-controller="AdminGenres" asp-action="Index">Genres</a>
+            </div>
+        </article>
+    </div>
+</section>

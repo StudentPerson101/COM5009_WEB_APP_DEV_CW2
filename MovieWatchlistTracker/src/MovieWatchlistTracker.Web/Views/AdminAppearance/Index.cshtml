@@ -1,0 +1,123 @@
+@model AdminAppearanceViewModel
+
+@{
+    ViewData["Title"] = "Appearance";
+}
+
+<section class="browse-header" aria-labelledby="admin-appearance-title">
+    <div>
+        <p class="eyebrow">Admin</p>
+        <h1 id="admin-appearance-title">Appearance</h1>
+    </div>
+    <a class="btn btn-outline-secondary" asp-controller="AdminMaintenance" asp-action="Index">Maintenance</a>
+</section>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success" role="status">@statusMessage</div>
+}
+
+<form class="admin-form appearance-form" asp-action="Index" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+    <div class="appearance-grid">
+        <fieldset class="appearance-fieldset">
+            <legend>Branding</legend>
+
+            <div class="appearance-asset appearance-asset--logo">
+                <div class="appearance-preview appearance-preview--logo">
+                    @if (!string.IsNullOrWhiteSpace(Model.CurrentLogoPath))
+                    {
+                        <img src="@Model.CurrentLogoPath" alt="Current logo" />
+                    }
+                    else
+                    {
+                        <span>No logo</span>
+                    }
+                </div>
+                <div>
+                    <label class="form-label" asp-for="LogoUpload"></label>
+                    <input class="form-control" asp-for="LogoUpload" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+                    <span class="text-danger" asp-validation-for="LogoUpload"></span>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" asp-for="RemoveLogo" />
+                        <label class="form-check-label" asp-for="RemoveLogo"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="appearance-asset appearance-asset--banner">
+                <div class="appearance-preview appearance-preview--banner">
+                    @if (!string.IsNullOrWhiteSpace(Model.CurrentBannerPath))
+                    {
+                        <img src="@Model.CurrentBannerPath" alt="Current banner" />
+                    }
+                    else
+                    {
+                        <span>No banner</span>
+                    }
+                </div>
+                <div>
+                    <label class="form-label" asp-for="BannerUpload"></label>
+                    <input class="form-control" asp-for="BannerUpload" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" />
+                    <span class="text-danger" asp-validation-for="BannerUpload"></span>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" asp-for="RemoveBanner" />
+                        <label class="form-check-label" asp-for="RemoveBanner"></label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="appearance-fieldset">
+            <legend>Colours</legend>
+
+            <div class="appearance-colour-grid">
+                <div>
+                    <label class="form-label" asp-for="PageBackgroundColor"></label>
+                    <input class="form-control form-control-color" asp-for="PageBackgroundColor" type="color" />
+                    <span class="text-danger" asp-validation-for="PageBackgroundColor"></span>
+                </div>
+                <div>
+                    <label class="form-label" asp-for="TextColor"></label>
+                    <input class="form-control form-control-color" asp-for="TextColor" type="color" />
+                    <span class="text-danger" asp-validation-for="TextColor"></span>
+                </div>
+                <div>
+                    <label class="form-label" asp-for="NavigationBarTextColor"></label>
+                    <input class="form-control form-control-color" asp-for="NavigationBarTextColor" type="color" />
+                    <span class="text-danger" asp-validation-for="NavigationBarTextColor"></span>
+                </div>
+                <div>
+                    <label class="form-label" asp-for="BrowsePageHeadingColor"></label>
+                    <input class="form-control form-control-color" asp-for="BrowsePageHeadingColor" type="color" />
+                    <span class="text-danger" asp-validation-for="BrowsePageHeadingColor"></span>
+                </div>
+                <div>
+                    <label class="form-label" asp-for="OutlineColor"></label>
+                    <input class="form-control form-control-color" asp-for="OutlineColor" type="color" />
+                    <span class="text-danger" asp-validation-for="OutlineColor"></span>
+                </div>
+                <div>
+                    <label class="form-label" asp-for="OptionButtonOutlineColor"></label>
+                    <input class="form-control form-control-color" asp-for="OptionButtonOutlineColor" type="color" />
+                    <span class="text-danger" asp-validation-for="OptionButtonOutlineColor"></span>
+                </div>
+                <div>
+                    <label class="form-label" asp-for="OptionButtonTextColor"></label>
+                    <input class="form-control form-control-color" asp-for="OptionButtonTextColor" type="color" />
+                    <span class="text-danger" asp-validation-for="OptionButtonTextColor"></span>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="admin-form-actions">
+        <button class="btn btn-primary" type="submit">Save Appearance</button>
+        <a class="btn btn-outline-secondary" asp-controller="Movies" asp-action="Index">Preview Browse</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

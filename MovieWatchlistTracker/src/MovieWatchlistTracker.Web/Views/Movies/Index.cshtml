@@ -1,19 +1,55 @@
 @model MovieSearchViewModel
+@using MovieWatchlistTracker.Web.Services.Interfaces
+@inject IAppearanceSettingsService AppearanceSettings
+@inject IBrowsePageContentService BrowsePageContent
 
 @{
     ViewData["Title"] = "Browse Movies";
+    var appearanceSettings = await AppearanceSettings.GetSettingsAsync();
+    var browsePageContent = await BrowsePageContent.GetSettingsAsync();
+    var returnUrl = $"{Context.Request.PathBase}{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+@if (!string.IsNullOrWhiteSpace(appearanceSettings.BannerPath))
+{
+    <section class="home-banner" aria-label="Movie Watchlist Tracker banner">
+        <img src="@appearanceSettings.BannerPath" alt="Movie Watchlist Tracker" />
+    </section>
 }
 
 <section class="browse-header" aria-labelledby="browse-title">
     <div>
-        <p class="eyebrow">Movie Watchlist Tracker</p>
-        <h1 id="browse-title">Browse Movies</h1>
+        <p class="eyebrow browse-page-eyebrow">@browsePageContent.EyebrowText</p>
+        <h1 id="browse-title" class="browse-page-heading">@browsePageContent.HeadingText</h1>
     </div>
     <div class="browse-summary" aria-label="Browse result count">
         <strong>@Model.Movies.Count</strong>
         <span>movies</span>
     </div>
 </section>
+
+@if (User.IsInRole("Admin"))
+{
+    <details class="admin-form browse-heading-editor">
+        <summary>Edit Browse Page Headings</summary>
+        <form asp-controller="AdminBrowsePageContent" asp-action="Update" method="post">
+            <input type="hidden" name="ReturnUrl" value="@returnUrl" />
+            <div class="browse-heading-editor-grid">
+                <div>
+                    <label class="form-label" for="browse-heading-eyebrow">Edit Browse Eyebrow Text</label>
+                    <input id="browse-heading-eyebrow" class="form-control" name="EyebrowText" value="@browsePageContent.EyebrowText" maxlength="80" required />
+                </div>
+                <div>
+                    <label class="form-label" for="browse-heading-title">Edit Browse Heading Text</label>
+                    <input id="browse-heading-title" class="form-control" name="HeadingText" value="@browsePageContent.HeadingText" maxlength="140" required />
+                </div>
+            </div>
+            <div class="admin-form-actions">
+                <button class="btn btn-primary" type="submit">Save Headings</button>
+            </div>
+        </form>
+    </details>
+}
 
 <form class="filter-bar" asp-controller="Movies" asp-action="Index" method="get" aria-label="Movie search and filters">
     <div class="filter-field filter-field--wide">
@@ -57,9 +93,9 @@
         <label class="form-label" for="minimumRating">Rating</label>
         <select id="minimumRating" class="form-select" name="minimumRating">
             <option value="">Any rating</option>
-            @for (var rating = 5; rating >= 1; rating--)
+            @for (var rating = 10; rating >= 1; rating--)
             {
-                <option value="@rating" selected="@(Model.SelectedRating == rating)">@($"{rating}+ / 5")</option>
+                <option value="@rating" selected="@(Model.SelectedRating == rating)">@($"{rating}+ / 10")</option>
             }
         </select>
     </div>
@@ -88,6 +124,10 @@
 @if (TempData["StatusMessage"] is string statusMessage)
 {
     <div class="alert alert-success mt-3" role="status">@statusMessage</div>
+}
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger mt-3" role="alert">@errorMessage</div>
 }
 
 <section class="content-section" aria-labelledby="popular-heading">

@@ -43,6 +43,8 @@ builder.Services.AddScoped<IMovieSearchService, MovieSearchService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IAdminCatalogService, AdminCatalogService>();
 builder.Services.AddScoped<ICoverStorageService, CoverStorageService>();
+builder.Services.AddScoped<IAppearanceSettingsService, AppearanceSettingsService>();
+builder.Services.AddScoped<IBrowsePageContentService, BrowsePageContentService>();
 // Stage 13 chooses the internal seeded catalog. Register an external API service only after a provider is explicitly approved.
 
 var app = builder.Build();

@@ -79,7 +79,7 @@
                         </div>
                         <div class="media-row-meta">
                             <span class="status-pill">watched</span>
-                            <span>@(item.AverageRating.HasValue ? $"{item.AverageRating}/5" : "No ratings")</span>
+                            <span>@(item.AverageRating.HasValue ? $"{RatingDisplayFormatter.Format(item.AverageRating)}/10" : "No ratings")</span>
                         </div>
                         <div class="row-actions">
                             <a class="btn btn-outline-secondary btn-sm" asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId">Review</a>

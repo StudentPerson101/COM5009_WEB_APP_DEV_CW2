@@ -9,6 +9,6 @@ public class MovieCardViewModel
     public IReadOnlyList<string> Genres { get; set; } = [];
     public int? Runtime { get; set; }
     public string DisplayDuration => MovieDurationFormatter.Format(Runtime, "Duration TBA");
-    public decimal? AverageRating { get; set; }
+    public double? AverageRating { get; set; }
     public bool IsInCurrentUserWatchlist { get; set; }
 }

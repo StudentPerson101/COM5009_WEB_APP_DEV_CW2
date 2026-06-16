@@ -41,7 +41,7 @@ public class MovieSearchServiceTests
         await watchlistService.MarkWatchedAsync(watchlistItem.Id, TestDatabase.PrimaryUserId);
 
         var ratingService = new RatingService(context);
-        await ratingService.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 5);
+        await ratingService.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 8.2);
 
         var service = new MovieSearchService(context);
 
@@ -51,7 +51,7 @@ public class MovieSearchServiceTests
         Assert.Equal("Alpha Signal", details.Title);
         Assert.True(details.IsInWatchlist);
         Assert.True(details.IsWatched);
-        Assert.Equal(5, details.CurrentUserRating);
+        Assert.Equal(8.2, details.CurrentUserRating);
         Assert.Contains("Action", details.Genres);
     }
 

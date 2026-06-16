@@ -1,9 +1,18 @@
 ﻿<!DOCTYPE html>
+@using MovieWatchlistTracker.Web.Services.Interfaces
+@inject IAppearanceSettingsService AppearanceSettings
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var appearanceSettings = await AppearanceSettings.GetSettingsAsync();
 
     bool IsActiveController(string controller)
     {
+        if (string.Equals(controller, "Admin", StringComparison.OrdinalIgnoreCase))
+        {
+            return currentController is not null &&
+                currentController.StartsWith("Admin", StringComparison.OrdinalIgnoreCase);
+        }
+
         return string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase) ||
             (string.Equals(controller, "Movies", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase));
@@ -33,13 +42,33 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MovieWatchlistTracker.Web.styles.css" asp-append-version="true" />
+    <style>
+        :root {
+            --app-page-bg: @appearanceSettings.PageBackgroundColor;
+            --app-text-color: @appearanceSettings.TextColor;
+            --app-nav-text-color: @appearanceSettings.NavigationBarTextColor;
+            --app-browse-heading-color: @appearanceSettings.BrowsePageHeadingColor;
+            --app-outline-color: @appearanceSettings.OutlineColor;
+            --app-option-outline-color: @appearanceSettings.OptionButtonOutlineColor;
+            --app-option-text-color: @appearanceSettings.OptionButtonTextColor;
+        }
+    </style>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom app-navbar">
             <div class="container">
-                <a class="navbar-brand fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Movie Watchlist Tracker</a>
+                <a class="navbar-brand app-logo-link" asp-area="" asp-controller="Home" asp-action="Index" aria-label="Movie Watchlist Tracker home">
+                    @if (!string.IsNullOrWhiteSpace(appearanceSettings.LogoPath))
+                    {
+                        <img class="app-logo" src="@appearanceSettings.LogoPath" alt="Movie Watchlist Tracker" />
+                    }
+                    else
+                    {
+                        <span class="app-logo-fallback">Movie Watchlist Tracker</span>
+                    }
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -61,13 +90,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="@NavLinkClass("AdminMovies")" aria-current="@CurrentPage("AdminMovies")" asp-area="" asp-controller="AdminMovies" asp-action="Index">Admin Movies</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="@NavLinkClass("AdminGenres")" aria-current="@CurrentPage("AdminGenres")" asp-area="" asp-controller="AdminGenres" asp-action="Index">Genres</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="@NavLinkClass("AdminMaintenance")" aria-current="@CurrentPage("AdminMaintenance")" asp-area="" asp-controller="AdminMaintenance" asp-action="Index">Maintenance</a>
+                                <a class="@NavLinkClass("Admin")" aria-current="@CurrentPage("Admin")" asp-area="" asp-controller="Admin" asp-action="Index">Admin Portal</a>
                             </li>
                         }
                     </ul>

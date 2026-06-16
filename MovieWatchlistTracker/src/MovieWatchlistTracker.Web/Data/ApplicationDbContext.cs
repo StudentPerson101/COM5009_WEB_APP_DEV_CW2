@@ -19,6 +19,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ViewingHistoryItem> ViewingHistoryItems => Set<ViewingHistoryItem>();
     public DbSet<Rating> Ratings => Set<Rating>();
     public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<SiteAppearanceSettings> SiteAppearanceSettings => Set<SiteAppearanceSettings>();
+    public DbSet<BrowsePageContentSettings> BrowsePageContentSettings => Set<BrowsePageContentSettings>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -33,6 +35,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         ConfigureViewingHistoryItem(builder);
         ConfigureRating(builder);
         ConfigureReview(builder);
+        ConfigureSiteAppearanceSettings(builder);
+        ConfigureBrowsePageContentSettings(builder);
     }
 
     private static void ConfigureApplicationUser(ModelBuilder builder)
@@ -233,7 +237,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             {
                 table.HasCheckConstraint(
                     "CK_Ratings_Score",
-                    "Score BETWEEN 1 AND 5");
+                    "Score BETWEEN 1 AND 10");
             });
 
             entity.HasOne(rating => rating.Movie)
@@ -281,6 +285,64 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                     review.MovieId
                 })
                 .IsUnique();
+        });
+    }
+
+    private static void ConfigureSiteAppearanceSettings(ModelBuilder builder)
+    {
+        builder.Entity<SiteAppearanceSettings>(entity =>
+        {
+            entity.ToTable("SiteAppearanceSettings");
+
+            entity.Property(settings => settings.LogoPath)
+                .HasMaxLength(300);
+
+            entity.Property(settings => settings.BannerPath)
+                .HasMaxLength(300);
+
+            entity.Property(settings => settings.PageBackgroundColor)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(settings => settings.TextColor)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(settings => settings.NavigationBarTextColor)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(settings => settings.BrowsePageHeadingColor)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(settings => settings.OutlineColor)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(settings => settings.OptionButtonOutlineColor)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(settings => settings.OptionButtonTextColor)
+                .HasMaxLength(20)
+                .IsRequired();
+        });
+    }
+
+    private static void ConfigureBrowsePageContentSettings(ModelBuilder builder)
+    {
+        builder.Entity<BrowsePageContentSettings>(entity =>
+        {
+            entity.ToTable("BrowsePageContentSettings");
+
+            entity.Property(settings => settings.EyebrowText)
+                .HasMaxLength(80)
+                .IsRequired();
+
+            entity.Property(settings => settings.HeadingText)
+                .HasMaxLength(140)
+                .IsRequired();
         });
     }
 }

@@ -142,7 +142,7 @@ public class WatchlistService : IWatchlistService
                         .ToList(),
                     AverageRating = item.Movie.Ratings.Count == 0
                         ? null
-                        : Math.Round((decimal)item.Movie.Ratings.Average(rating => rating.Score), 1),
+                        : Math.Round(item.Movie.Ratings.Average(rating => rating.Score), 1),
                     Status = item.Status.ToString().ToLowerInvariant(),
                     AddedAt = item.AddedAt
                 })

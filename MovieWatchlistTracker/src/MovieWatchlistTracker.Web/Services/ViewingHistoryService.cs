@@ -75,7 +75,7 @@ public class ViewingHistoryService : IViewingHistoryService
                         .ToList(),
                     AverageRating = item.Movie.Ratings.Count == 0
                         ? null
-                        : Math.Round((decimal)item.Movie.Ratings.Average(rating => rating.Score), 1),
+                        : Math.Round(item.Movie.Ratings.Average(rating => rating.Score), 1),
                     Status = WatchlistItemStatus.Watched.ToString().ToLowerInvariant(),
                     AddedAt = item.WatchedAt,
                     WatchedAt = item.WatchedAt

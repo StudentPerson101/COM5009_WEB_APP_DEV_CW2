@@ -23,7 +23,6 @@ public static class DbInitializer
         var defaultWatchlist = EnsureDefaultWatchlist(context, sampleUser.Id);
         EnsureWatchlistItems(context, defaultWatchlist.Id, moviesByCatalogKey);
         EnsureViewingHistory(context, sampleUser.Id, moviesByCatalogKey);
-        EnsureRatings(context, sampleUser.Id, moviesByCatalogKey);
         EnsureReviews(context, sampleUser.Id, moviesByCatalogKey);
 
         context.SaveChanges();
@@ -340,38 +339,6 @@ public static class DbInitializer
             }
 
             watchedAt = watchedAt.AddDays(3);
-        }
-    }
-
-    private static void EnsureRatings(
-        ApplicationDbContext context,
-        string userId,
-        IReadOnlyDictionary<string, Movie> moviesByCatalogKey)
-    {
-        foreach (var (catalogKey, score) in SeedData.Ratings)
-        {
-            if (!moviesByCatalogKey.TryGetValue(catalogKey, out var movie))
-            {
-                continue;
-            }
-
-            var rating = context.Ratings.SingleOrDefault(existing =>
-                existing.UserId == userId &&
-                existing.MovieId == movie.Id);
-
-            if (rating is null)
-            {
-                context.Ratings.Add(new Rating
-                {
-                    UserId = userId,
-                    MovieId = movie.Id,
-                    Score = score
-                });
-            }
-            else
-            {
-                rating.Score = score;
-            }
         }
     }
 

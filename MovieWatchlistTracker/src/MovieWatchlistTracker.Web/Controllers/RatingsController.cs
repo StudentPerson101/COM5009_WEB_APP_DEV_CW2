@@ -22,7 +22,7 @@ public class RatingsController : Controller
     {
         if (!ModelState.IsValid)
         {
-            TempData["StatusMessage"] = "Choose a rating from 1 to 5.";
+            TempData["StatusMessage"] = "Choose a rating from 1.0 to 10.0.";
             return RedirectToAction("Details", "Movies", new { id = model.MovieId });
         }
 
@@ -33,7 +33,7 @@ public class RatingsController : Controller
         }
         catch (ArgumentOutOfRangeException)
         {
-            TempData["StatusMessage"] = "Choose a rating from 1 to 5.";
+            TempData["StatusMessage"] = "Choose a rating from 1.0 to 10.0.";
         }
         catch (InvalidOperationException)
         {

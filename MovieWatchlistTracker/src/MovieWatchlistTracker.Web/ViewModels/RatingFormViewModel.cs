@@ -7,6 +7,6 @@ public class RatingFormViewModel
     [Required]
     public int MovieId { get; set; }
 
-    [Range(1, 5)]
-    public int Score { get; set; }
+    [Range(typeof(double), "1", "10")]
+    public double Score { get; set; }
 }

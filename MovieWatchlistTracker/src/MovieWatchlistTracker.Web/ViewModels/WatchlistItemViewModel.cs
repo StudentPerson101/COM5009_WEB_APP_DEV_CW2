@@ -8,7 +8,7 @@ public class WatchlistItemViewModel
     public int? ReleaseYear { get; set; }
     public string? PosterUrl { get; set; }
     public IReadOnlyList<string> Genres { get; set; } = [];
-    public decimal? AverageRating { get; set; }
+    public double? AverageRating { get; set; }
     public string Status { get; set; } = "planned";
     public DateTime AddedAt { get; set; }
     public DateTime? WatchedAt { get; set; }

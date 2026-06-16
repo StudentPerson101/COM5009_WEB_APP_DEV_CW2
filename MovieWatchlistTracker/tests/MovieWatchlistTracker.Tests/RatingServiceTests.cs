@@ -15,18 +15,18 @@ public class RatingServiceTests
         var movieId = await MovieIdAsync(context);
         var service = new RatingService(context);
 
-        var created = await service.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 3);
-        var updated = await service.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 5);
+        var created = await service.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 7.4);
+        var updated = await service.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 8.25);
 
         Assert.Equal(created.Id, updated.Id);
-        Assert.Equal(5, updated.Score);
+        Assert.Equal(8.3, updated.Score);
         Assert.Equal(1, await context.Ratings.CountAsync(rating => rating.MovieId == movieId));
     }
 
     [Theory]
     [InlineData(0)]
-    [InlineData(6)]
-    public async Task CreateOrUpdateRejectsInvalidRating(int score)
+    [InlineData(10.1)]
+    public async Task CreateOrUpdateRejectsInvalidRating(double score)
     {
         using var database = new TestDatabase();
         await using var context = database.CreateContext();
@@ -46,7 +46,7 @@ public class RatingServiceTests
         await using var context = database.CreateContext();
         var movieId = await MovieIdAsync(context);
         var service = new RatingService(context);
-        var rating = await service.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 4);
+        var rating = await service.CreateOrUpdateAsync(TestDatabase.PrimaryUserId, movieId, 8.0);
 
         var deletedByOtherUser = await service.DeleteAsync(rating.Id, TestDatabase.OtherUserId);
         var deletedByOwner = await service.DeleteAsync(rating.Id, TestDatabase.PrimaryUserId);

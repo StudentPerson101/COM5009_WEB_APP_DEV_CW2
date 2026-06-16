@@ -65,7 +65,7 @@ public class MovieSearchService : IMovieSearchService
                         .ToList(),
                     AverageRating = movie.Ratings.Count == 0
                         ? null
-                        : Math.Round((decimal)movie.Ratings.Average(rating => rating.Score), 1),
+                        : Math.Round(movie.Ratings.Average(rating => rating.Score), 1),
                     IsInCurrentUserWatchlist = userId != null &&
                         movie.WatchlistItems.Any(item => item.Watchlist != null && item.Watchlist.UserId == userId)
                 })
@@ -105,7 +105,7 @@ public class MovieSearchService : IMovieSearchService
                 .ToList(),
             AverageRating = movie.Ratings.Count == 0
                 ? null
-                : Math.Round((decimal)movie.Ratings.Average(rating => rating.Score), 1),
+                : Math.Round(movie.Ratings.Average(rating => rating.Score), 1),
             CurrentUserRatingId = currentUserRating?.Id,
             CurrentUserRating = currentUserRating?.Score,
             CurrentUserReviewId = currentUserReview?.Id,
@@ -124,7 +124,7 @@ public class MovieSearchService : IMovieSearchService
                         : review.User.UserName ?? "Movie watcher",
                     Rating = movie.Ratings
                         .Where(rating => rating.UserId == review.UserId)
-                        .Select(rating => (int?)rating.Score)
+                        .Select(rating => (double?)rating.Score)
                         .SingleOrDefault(),
                     Text = review.Text,
                     CreatedAt = review.CreatedAt,

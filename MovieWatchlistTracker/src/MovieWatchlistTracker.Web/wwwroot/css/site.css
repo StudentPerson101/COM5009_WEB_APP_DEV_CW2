@@ -630,6 +630,41 @@ a:hover {
     margin-bottom: 1rem;
 }
 
+.admin-portal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.admin-portal-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 220px;
+    padding: 1rem;
+    border: 1px solid #d7ded8;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.admin-portal-item h3 {
+    margin: 0 0 0.5rem;
+    color: #12343b;
+    font-size: 1.25rem;
+}
+
+.admin-portal-item p {
+    margin: 0;
+    color: #667177;
+}
+
+.admin-portal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
 .admin-stat,
 .admin-maintenance-panel {
     padding: 1rem;
@@ -707,6 +742,7 @@ a:hover {
     .review-layout,
     .media-row,
     .media-row-body,
+    .browse-heading-editor-grid,
     .admin-maintenance-panel,
     .admin-detail-grid,
     .admin-detail-list {
@@ -750,5 +786,424 @@ a:hover {
 
     .navbar .nav-link.active::after {
         width: 32px;
+    }
+}
+
+:root {
+    --app-page-bg: #000000;
+    --app-text-color: #39ff14;
+    --app-nav-text-color: #39ff14;
+    --app-browse-heading-color: #ff1744;
+    --app-outline-color: #39ff14;
+    --app-option-outline-color: #ff1744;
+    --app-option-text-color: #00fff7;
+    --app-panel-bg: #030603;
+    --app-panel-bg-strong: #071007;
+}
+
+html,
+body {
+    background: var(--app-page-bg);
+}
+
+body {
+    color: var(--app-text-color);
+    font-family: "Lucida Console", "Courier New", monospace;
+    text-shadow:
+        1px 0 0 rgba(0, 255, 255, 0.32),
+        -1px 0 0 rgba(255, 0, 82, 0.22),
+        0 0 8px color-mix(in srgb, var(--app-text-color) 46%, transparent);
+}
+
+body::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.055) 0,
+            rgba(255, 255, 255, 0.055) 1px,
+            transparent 1px,
+            transparent 4px
+        ),
+        var(--app-page-bg);
+    content: "";
+}
+
+a,
+.navbar .nav-link,
+.navbar-brand,
+.movie-card h3,
+.movie-card h3 a,
+.review-item h3,
+.media-row h2,
+.media-row h2 a,
+.browse-header h1,
+.details-main h1,
+.auth-panel h1,
+.section-heading h2,
+.empty-state h2,
+.admin-portal-item h3,
+.admin-maintenance-panel h3,
+.admin-stat strong,
+.admin-related-panel h2,
+.eyebrow,
+.muted,
+.browse-summary span,
+.meta-row,
+.field-help,
+.movie-facts,
+.details-description,
+.empty-state p,
+.admin-portal-item p,
+.admin-stat span,
+.admin-maintenance-panel p,
+.admin-meta,
+.admin-detail-list dt,
+.text-muted,
+.lead,
+.table,
+.table th,
+.table td,
+.form-label,
+.form-check-label,
+legend,
+dt,
+dd,
+p,
+span,
+strong,
+h1,
+h2,
+h3 {
+    color: var(--app-text-color) !important;
+}
+
+a:hover,
+a:focus,
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: var(--app-option-text-color) !important;
+}
+
+.app-navbar,
+.navbar.bg-white,
+.movie-card,
+.review-panel,
+.review-item,
+.media-row,
+.empty-state,
+.auth-panel,
+.browse-summary,
+.filter-bar,
+.admin-table-wrap,
+.admin-form,
+.admin-related-panel,
+.admin-detail-list,
+.admin-checkbox-grid,
+.admin-portal-item,
+.admin-stat,
+.admin-maintenance-panel,
+.admin-pill-form,
+.autocomplete-menu,
+.alert,
+.table,
+.border,
+.rounded-2,
+.appearance-fieldset,
+.appearance-preview {
+    border-color: var(--app-outline-color) !important;
+    background: var(--app-panel-bg) !important;
+}
+
+.app-navbar {
+    box-shadow: 0 0 16px color-mix(in srgb, var(--app-outline-color) 38%, transparent);
+}
+
+.navbar .nav-link.active::after {
+    background: var(--app-outline-color);
+    box-shadow: 0 0 10px var(--app-outline-color);
+}
+
+.app-logo-link {
+    display: inline-flex;
+    align-items: center;
+    width: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    padding: 0;
+    border: 1px solid var(--app-outline-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000 !important;
+}
+
+.app-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.app-logo-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 56px;
+    padding: 0.35rem;
+    color: var(--app-text-color);
+    font-size: 0.62rem;
+    font-weight: 800;
+    line-height: 1.1;
+    text-align: center;
+}
+
+.home-banner {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--app-outline-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 0 18px color-mix(in srgb, var(--app-outline-color) 35%, transparent);
+}
+
+.home-banner img {
+    display: block;
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+}
+
+.poster-frame,
+.poster-placeholder {
+    background:
+        linear-gradient(140deg, rgba(57, 255, 20, 0.16), rgba(0, 255, 247, 0.12)),
+        #000 !important;
+    color: var(--app-text-color);
+}
+
+.poster-fallback,
+.meta-row span,
+.status-pill,
+.admin-meta {
+    border-color: var(--app-outline-color) !important;
+    background: var(--app-panel-bg-strong) !important;
+    color: var(--app-text-color) !important;
+}
+
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-outline-danger,
+.btn-link.nav-link {
+    border-color: var(--app-option-outline-color) !important;
+    background: #000 !important;
+    color: var(--app-option-text-color) !important;
+    text-shadow:
+        1px 0 0 rgba(255, 0, 82, 0.42),
+        0 0 10px color-mix(in srgb, var(--app-option-text-color) 55%, transparent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--app-option-outline-color) 28%, transparent);
+}
+
+.btn:hover,
+.btn:focus,
+.btn-primary:hover,
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover,
+.btn-outline-danger:hover,
+.btn-danger:hover {
+    background: color-mix(in srgb, var(--app-option-outline-color) 18%, #000) !important;
+    color: var(--app-option-text-color) !important;
+}
+
+.navbar .nav-link,
+.navbar .btn-link.nav-link,
+.app-logo-fallback {
+    color: var(--app-nav-text-color) !important;
+}
+
+.browse-header .browse-page-heading,
+.browse-header .browse-page-eyebrow {
+    color: var(--app-browse-heading-color) !important;
+}
+
+.browse-heading-editor {
+    margin-bottom: 1rem;
+}
+
+.browse-heading-editor summary {
+    width: fit-content;
+    cursor: pointer;
+    color: var(--app-option-text-color);
+    font-weight: 800;
+}
+
+.browse-heading-editor-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    box-shadow:
+        0 0 0 0.1rem #000,
+        0 0 0 0.25rem color-mix(in srgb, var(--app-outline-color) 45%, transparent);
+}
+
+.form-control,
+.form-select,
+.form-check-input {
+    border-color: var(--app-outline-color);
+    background-color: #000;
+    color: var(--app-text-color);
+}
+
+.form-control::placeholder {
+    color: color-mix(in srgb, var(--app-text-color) 62%, #000);
+}
+
+.autocomplete-option,
+.autocomplete-option-title,
+.autocomplete-option-meta {
+    color: var(--app-text-color) !important;
+}
+
+.autocomplete-option {
+    border-bottom-color: var(--app-outline-color) !important;
+    background: var(--app-panel-bg) !important;
+}
+
+.autocomplete-option:hover,
+.autocomplete-option:focus,
+.autocomplete-option.is-active {
+    background: color-mix(in srgb, var(--app-outline-color) 18%, #000) !important;
+    color: var(--app-option-text-color) !important;
+}
+
+.table > :not(caption) > * > * {
+    border-color: var(--app-outline-color);
+    background: transparent;
+    color: var(--app-text-color);
+}
+
+.alert-success,
+.alert-info,
+.alert-warning,
+.alert-danger {
+    border-color: var(--app-outline-color);
+    background: var(--app-panel-bg);
+    color: var(--app-text-color);
+}
+
+.text-danger,
+.danger-link {
+    color: var(--app-option-outline-color) !important;
+}
+
+.appearance-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.appearance-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr);
+    gap: 1rem;
+}
+
+.appearance-fieldset {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--app-outline-color);
+    border-radius: 8px;
+}
+
+.appearance-fieldset legend {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.appearance-asset {
+    display: grid;
+    grid-template-columns: minmax(96px, 160px) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+}
+
+.appearance-asset--banner {
+    grid-template-columns: 1fr;
+}
+
+.appearance-preview {
+    display: grid;
+    place-items: center;
+    min-height: 110px;
+    border: 1px solid var(--app-outline-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.appearance-preview--logo {
+    aspect-ratio: 1;
+}
+
+.appearance-preview--banner {
+    width: min(100%, 640px);
+    min-height: 0;
+    aspect-ratio: 16 / 5;
+}
+
+.appearance-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.appearance-colour-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.form-control-color {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .appearance-grid,
+    .appearance-asset {
+        grid-template-columns: 1fr;
+    }
+
+    .app-logo-link {
+        width: 48px;
+        min-width: 48px;
+        min-height: 48px;
+    }
+
+    .app-logo-fallback {
+        min-height: 48px;
+        font-size: 0.55rem;
     }
 }

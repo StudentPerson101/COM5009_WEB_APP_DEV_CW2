@@ -21,13 +21,16 @@
         </div>
         <div class="meta-row" aria-label="@Model.Title quick facts">
             <span>@Model.DisplayDuration</span>
-            <span>@(Model.AverageRating.HasValue ? $"{Model.AverageRating}/5" : "No ratings")</span>
+            <span>@(Model.AverageRating.HasValue ? $"{RatingDisplayFormatter.Format(Model.AverageRating)}/10" : "No ratings")</span>
         </div>
         @if (User.Identity?.IsAuthenticated == true)
         {
             @if (Model.IsInCurrentUserWatchlist)
             {
-                <span class="status-pill">In Watchlist</span>
+                <form asp-controller="Watchlists" asp-action="RemoveMovie" method="post">
+                    <input type="hidden" name="movieId" value="@Model.MovieId" />
+                    <button class="btn btn-outline-danger btn-sm w-100" type="submit" data-confirm="Remove @Model.Title from your watchlist?" aria-label="Remove @Model.Title from watchlist">Remove from Watchlist</button>
+                </form>
             }
             else
             {

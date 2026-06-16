@@ -10,9 +10,9 @@ public class MovieDetailsViewModel
     public int? Runtime { get; set; }
     public string DisplayDuration => MovieDurationFormatter.Format(Runtime, "Duration TBA");
     public IReadOnlyList<string> Genres { get; set; } = [];
-    public decimal? AverageRating { get; set; }
+    public double? AverageRating { get; set; }
     public int? CurrentUserRatingId { get; set; }
-    public int? CurrentUserRating { get; set; }
+    public double? CurrentUserRating { get; set; }
     public int? CurrentUserReviewId { get; set; }
     public string? CurrentUserReview { get; set; }
     public bool IsInWatchlist { get; set; }

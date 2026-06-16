@@ -35,8 +35,8 @@ public class ViewModelValidationTests
 
     [Theory]
     [InlineData(0)]
-    [InlineData(6)]
-    public void RatingScoreMustBeOneThroughFive(int score)
+    [InlineData(10.1)]
+    public void RatingScoreMustBeOneThroughTen(double score)
     {
         var model = new RatingFormViewModel
         {
